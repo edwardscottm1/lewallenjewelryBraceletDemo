@@ -29,6 +29,7 @@ new Sortable(document.querySelector("#sortable"), {
             updateTotal();
             return;
         }
+        console.log("ON ADDDD");  
         addXButton(evnt);
         updateTotal();
         // }
@@ -40,6 +41,7 @@ new Sortable(document.querySelector("#sortable"), {
 
 // Function used to add x button on bead when added to bracelet
 function addXButton(evnt) {
+    console.trace("Added x");
     let bead = '';
     // IF the user dragged in the item
     if (typeof evnt.item !== "undefined") {
@@ -79,9 +81,9 @@ function updateTotal() {
 
 
 document.querySelector("#choicetable").addEventListener("click", function (evnt) {
-
+    // SInce we apply lsitner to the div, we need to get the bead closets to the users cursor
     const bead = evnt.target.closest(".bead-state-highlight");
-
+    console.log("CLICK");
     // ensure we dont try code if user did not click a bead
     if (!bead) return;
 
@@ -95,7 +97,7 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
     let newBead = bead.cloneNode(true);
     newBead.style.position = "absolute";
     newBead.style.listStyleType = "none";
-    newBead.style.transition = "all .5s ease-out";
+    newBead.style.transition = "transform .5s ease-out";
     newBead.style.opacity = .5;
     // Ensure it goes above sortable div
     newBead.style.zIndex = "9999";
@@ -139,13 +141,22 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
     
     // Append to the body
     document.body.appendChild(newBead);
-    
+    // Needed for firefox to properly render animation
+    newBead.offsetWidth;
     // Add animation frame to show bead moving
     requestAnimationFrame(() => {
         // Use translate to move the bead
         newBead.style.transform = `translate(${deltaLeft}px, ${deltaTop}px)`;
     });
     
+//     newBead.addEventListener("transitionstart", () => {
+//     console.log("TRANSITION START");
+// });
+
+// newBead.addEventListener("transitionend", () => {
+//     console.log("TRANSITION END");
+// });
+
     // Once bead has transitioned, reset styles, add x button, update total
     newBead.addEventListener("transitionend", function (evnt) {
         // Add bead to correct container
@@ -161,7 +172,7 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
         addXButton(newBead);
         updateTotal();
     
-    })
+    },  { once: true });
 });
 
 
