@@ -355,7 +355,7 @@
                           left: 50%;
                           transform: translate(-50%, -50%);
 
-                          transition: all 5s ease;
+                          transition: all 3s linear;
 
                           background-color: white;
                           border: 1px black solid;
@@ -364,12 +364,22 @@
                           display: flex;
                           text-align: center;
                           align-items: center;
+
                         }
+
+                        /* Apply styles to the ghost bead */
+                        #sortable .sortable-ghost {
+                          border:2px solid green!important;
+                        }
+                        #sortable .sortable-ghost img {
+                          visibility: hidden;
+                        }
+                        #sortable .sortable-ghost span,
+                        #sortable .sortable-ghost button {
+                          display: none;
+                        }
+                      
                       </style>
-
-
-
-
 
 
                     <ul id="choicetable" class="chooser">

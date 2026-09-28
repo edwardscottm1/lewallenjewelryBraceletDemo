@@ -4,11 +4,12 @@
 new Sortable(document.querySelector("#choicetable"), {
     animation: 200,
     direction: "horizontal",
+    
     sort: false,
     group: {
         pull: "clone",
         name: "shared",
-        put: "false",
+        put: false,
     }
 
 });
@@ -22,7 +23,6 @@ new Sortable(document.querySelector("#sortable"), {
         console.log(checkForSpaceOnBracelet(evnt));
         if (checkForSpaceOnBracelet(evnt)) {
             createErrMsg("Not enough space for that bead!!!!!!!!!!!!!!!!");
-            console.log("Not enough space for that bead!!!!!!!!!!!!!!!!")
 
 
             evnt.item.remove();
@@ -41,7 +41,7 @@ new Sortable(document.querySelector("#sortable"), {
 
 // Function used to add x button on bead when added to bracelet
 function addXButton(evnt) {
-    console.trace("Added x");
+    // console.trace("Added x");
     let bead = '';
     // IF the user dragged in the item
     if (typeof evnt.item !== "undefined") {
@@ -87,10 +87,10 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
     // ensure we dont try code if user did not click a bead
     if (!bead) return;
 
-    // your animation code
+    // Check to see if there is enough space for the bead
     if (checkForSpaceOnBracelet(bead)) {
-        createErrMsg("Not enough space for that bead!!!!!!!!!!!!!!!!");
-        console.log("Not enough space for that bead!!!!!!!!!!!!!!!!")
+        // If the div already exists, don't create a new div
+        createErrMsg("Not enough space for that bead.");
         return;
     }
     // Clone bead at give styles needed to start transition
@@ -98,7 +98,7 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
     newBead.style.position = "absolute";
     newBead.style.listStyleType = "none";
     newBead.style.transition = "transform .5s ease-out";
-    newBead.style.opacity = .5;
+    newBead.style.opacity = ".5";
     // Ensure it goes above sortable div
     newBead.style.zIndex = "9999";
     
@@ -149,14 +149,6 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
         newBead.style.transform = `translate(${deltaLeft}px, ${deltaTop}px)`;
     });
     
-//     newBead.addEventListener("transitionstart", () => {
-//     console.log("TRANSITION START");
-// });
-
-// newBead.addEventListener("transitionend", () => {
-//     console.log("TRANSITION END");
-// });
-
     // Once bead has transitioned, reset styles, add x button, update total
     newBead.addEventListener("transitionend", function (evnt) {
         // Add bead to correct container
@@ -168,11 +160,12 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
         newBead.style.top = "";
         newBead.style.left = "";
         newBead.style.transition = "";
-        newBead.style.opacity = 1;
+
+        newBead.style.opacity = "1";
         addXButton(newBead);
         updateTotal();
     
-    },  { once: true });
+    }, {once: true});
 });
 
 
@@ -208,29 +201,37 @@ function checkForSpaceOnBracelet(evnt) {
 
 
 function createErrMsg(msg) {
+
+    // First check if an error msg is already shown
+    if (document.querySelector(".errorDiv")) {
+        return;
+    }
+    
+    // Create a div holding an error message
     let errorDiv = document.createElement("div");
     errorDiv.classList.add("errorDiv");
     errorDiv.textContent = msg;
 
-    // // Create 'x' button
-    // let removeButton = document.createElement("button");
-    // removeButton.textContent = 'x';
-    // removeButton.classList.add("removeBeadButton");
-    // removeButton.addEventListener("click", function (evnt) {
-    //     evnt.stopPropagation();
-    //     evnt.target.parentElement.remove();
-    //     // Update total cost
-    // });
-    // errorDiv.prepend(removeButton);
+    
+    // Remove the div once it transitioned
+    errorDiv.addEventListener("transitionend", function (evnt) {
+        if (evnt.type == "transitionend") {
+            evnt.target.remove();
+        }
+        console.log("REMOVE ME!");
+        console.log(evnt);
+    });
+
+    
+    document.body.append(errorDiv);
+    errorDiv.offsetWidth;
+    
+    // Start animation to make opacity go to 0
     requestAnimationFrame(() => {
         errorDiv.style.opacity = "0";
     })
 
-    errorDiv.addEventListener("transitionend", function (evnt) {
-        evnt.target.remove();
-    });
 
-    document.body.append(errorDiv);
 
 
 }
