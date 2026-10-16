@@ -205,22 +205,62 @@
               <!-- 
                -->
               <!--  -->
-               <!--  -->
               <!--  -->
-               <!--  -->
+              <!--  -->
+              <!--  -->
               <!-- remeber about this css!!!!!!!!!!!!!! -->
-              <div id="collector" style="position:sticky;top:0px;background-color:white;z-index:999;">
+              <style>
+
+                ul#clasptable {
+                  left: 87% !important;
+                }
+                .tclasp,
+                .tclaspleft, .hookclaspleft, .hookclasp, .coilclasp, .noclasp, .noclaspleft {
+                  aspect-ratio: 1.818;
+                  width: 13% !important;
+                  height: 51% !important;
+                  background-size: cover !important;
+                  top: 20% !important;
+                  
+                }
+                .coilclaspleft {
+                  aspect-ratio: 1.88;
+                  width: 13% !important;
+                  height: 51% !important;
+                  background-size: contain !important;
+                  top: 50% !important;
+                  transform: translateY(-50%);
+                }
+                
+                #sortable {
+                  /* salcuate percenatge for sizing then we go resize the beads */
+                  /* width: ; */
+                  top: 50% !important;
+                  transform: translateY(-50%);
+                  left: 13% !important;
+                  aspect-ratio: 11.7 !important;
+                  width: 78% !important;
+                  max-height: 49% !important;
+
+                  overflow: visible;
+                  /* background-image: url(https://lewallenjewelry.com/images/byob_template.jpg);
+                  background-size: cover;
+                  background-repeat: no-repeat; */
+                }
+
+                #sortable .bead-state-highlight, #sortable .bead-state-highlight img{
+                  /* height: 115% !important;
+                  width: auto !important;
+                  overflow: visible; */
+                  /* background-size: contain; */
+                }
+              </style>
+              <div id="collector"
+                style="position:sticky;top:0px;background-color:white;z-index:999;width:85vw;height:auto;aspect-ratio:7.3;
+                background-size:contain; background-position: center;">
                 <ul id="clasptableleft" class="noclaspleft"></ul>
-                <ul id="ropetable" class="norope"></ul>
-
-
-
 
                 <ul id="sortable" class="receiver"></ul>
-
-
-
-
                 <ul id="clasptable" class="noclasp"></ul>
               </div>
               <br clear="all" />
@@ -333,53 +373,58 @@
 
 
 
-                      <style>/* Used for x button on each bead */
-                        .removeBeadButton {
-                            text-align: center;
-                            margin: 0px;
-                            position: absolute;
-                            right: 0%;
-                            color: red;
-                            cursor: pointer;
+                    <style>
+                      /* Used for x button on each bead */
+                      .removeBeadButton {
+                        text-align: center;
+                        margin: 0px;
+                        position: absolute;
+                        right: 0%;
+                        color: red;
+                        cursor: pointer;
 
-                            background-color: rgba(255, 255, 255, 0.197);
-                            /* border-radius: 4px; */
-                            width: 20px;
+                        background-color: rgba(255, 255, 255, 0.197);
+                        /* border-radius: 4px; */
+                        width: 20px;
+                        padding: 0px;
 
-                        }
+                      }
 
-                        .errorDiv {
-                          position: fixed;
-                          padding: 10px;
-                          top: 50%;
-                          left: 50%;
-                          transform: translate(-50%, -50%);
+                      .errorDiv {
+                        position: fixed;
+                        padding: 10px;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
 
-                          transition: all 3s linear;
+                        transition: all 3s linear;
 
-                          background-color: white;
-                          border: 1px black solid;
-                          border-radius: 5px;
-                          color: red;
-                          display: flex;
-                          text-align: center;
-                          align-items: center;
+                        background-color: white;
+                        border: 1px black solid;
+                        border-radius: 5px;
+                        color: red;
+                        display: flex;
+                        text-align: center;
+                        align-items: center;
 
-                        }
+                      }
 
-                        /* Apply styles to the ghost bead */
-                        #sortable .sortable-ghost {
-                          border:2px solid green!important;
-                        }
-                        #sortable .sortable-ghost img {
-                          visibility: hidden;
-                        }
-                        #sortable .sortable-ghost span,
-                        #sortable .sortable-ghost button {
-                          display: none;
-                        }
-                      
-                      </style>
+                      /* Apply styles to the ghost bead */
+                      #sortable .sortable-ghost {
+                        border: 2px solid green !important;
+                      }
+
+                      #sortable .sortable-ghost img {
+                        visibility: hidden;
+                      }
+
+                      #sortable .sortable-ghost span,
+                      #sortable .sortable-ghost button,
+                      .sortable-fallback button {
+                        display: none !important;
+                        list-style-type: none;
+                      }
+                    </style>
 
 
                     <ul id="choicetable" class="chooser">
@@ -1395,7 +1440,7 @@
     data-cf-beacon='{"version":"2024.11.0","token":"705132b8d293494aab92e1616e2ca85b","r":1,"spa":2}'
     crossorigin="anonymous"></script>
 
-    <script src="sortbleScripts/main.js"></script>
+  <script src="sortbleScripts/main.js"></script>
 </body>
 
 </html>
