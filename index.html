@@ -254,12 +254,25 @@
                   overflow: visible; */
                   /* background-size: contain; */
                 }
+
+                #ropetable {
+                  /* aspect-ratio: 15; */
+                  height: 56% !important;
+                  width: 87% !important;
+                  background-size: contain;
+                  /* top: 0px !important; */
+                  /* left: 0px !important; */
+                  top: 50% !important;
+                  left: 50% !important;
+                  background-position: center;
+                  transform: translate(-50%,-46% ) !important;
+                }
               </style>
               <div id="collector"
-                style="position:sticky;top:0px;background-color:white;z-index:999;width:85vw;height:auto;aspect-ratio:7.3;
+                style="position:sticky;top:0px;background-color:white;z-index:999;width:90vw;height:auto;aspect-ratio:7.3;
                 background-size:contain; background-position: center;">
                 <ul id="clasptableleft" class="noclaspleft"></ul>
-
+                <ul id="ropetable" class="norope"></ul>
                 <ul id="sortable" class="receiver"></ul>
                 <ul id="clasptable" class="noclasp"></ul>
               </div>
