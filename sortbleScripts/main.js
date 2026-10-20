@@ -66,17 +66,39 @@ function addXButton(evnt) {
 function updateTotal() {
     // Get beads that are in the destination div
     const beads = document.querySelector("#sortable").children;
-
+    // Beads added to cart
+    let cart = '';
     // Set the initial total
     let total = 160.00;
+    let counter = 0;
     for (let bead of beads) {
-        let str = bead.children[1].value;
-        str = str.slice(str.indexOf("!") + 1);
-        total += Number.parseFloat(str);
+        // let beadParts = bead.value.split("+!");
+        let beadParts = bead.children[1].value.split("+!");
+        console.log(beadParts);
+        let slength = document.querySelectorAll("#select-result .choice").length;
+        console.log(slength);
+        // let str = ;
+        // str = str.slice(str.indexOf("!") + 1);
+        // total += Number.parseFloat(str);
+        if (parseFloat(beadParts[1]) <= 25 && counter < 3) {
+            counter++;
+            cart += `${beadParts[0]}\n`;
+        } else if (parseFloat(beadParts[1]) <= 42 && slength < 2) {
+            counter++;
+            cart += `${beadParts[0]}\n`;
+        } else {
+            total += parseFloat(beadParts[1]);
+            cart += beadParts.join("+!");
+        }
+        // console.log(counter);
+
     }
     // Update appropriate elements
+    document.querySelector("input#byob_prop4").value = cart;
+    console.log(document.querySelector("input#byob_prop4").value);
     document.querySelector("#showpricebottom").textContent = total.toFixed(2);
     document.querySelector("#showpricetop").textContent = total.toFixed(2);
+
 }
 
 
@@ -167,9 +189,6 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
     
     }, {once: true});
 });
-
-
-
 
 function checkForSpaceOnBracelet(evnt) {
     const bracelet = document.querySelector("#sortable");
