@@ -70,7 +70,7 @@ function updateTotal() {
         // let beadParts = bead.value.split("+!");
         let beadParts = bead.children[1].value.split("+!");
         console.log(beadParts);
-        let slength = document.querySelectorAll("#select-result .choice").length;
+        let slength = beads.length;
         console.log(slength);
         // let str = ;
         // str = str.slice(str.indexOf("!") + 1);
