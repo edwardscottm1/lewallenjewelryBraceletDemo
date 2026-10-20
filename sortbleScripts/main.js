@@ -151,7 +151,7 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
         // If no beads present, get the sortable div left value and add constants
         nextBeadPosLeft = sortableDiv.getClientRects()[0].left + BRACELET_CONTAINER_PADDING + BEAD_PADDING + window.scrollX;// 
     }
-    
+    console.log(nextBeadPosLeft);
     
     // Transform values, used for animation
     let deltaTop =  braceletTop - originalBeadTop;
