@@ -1,7 +1,7 @@
 "use strict";
 // 11 hours so far
 /* Set #choicetable div to be sortable with no cloning or accept new items*/
-new Sortable(document.querySelector("#choicetable"), {
+const beadChoiceSortable = new Sortable(document.querySelector("#choicetable"), {
     animation: 200,
     forceFallback: true,
     direction: "horizontal",
@@ -19,7 +19,6 @@ new Sortable(document.querySelector("#sortable"), {
     forceFallback: true, fallbackOnBody: true,
     direction: "horizontal",
     scroll: false,
-   
     // Function called when element is added by dragging
     onAdd: function (evnt) {
         resizeBeadForBracelet(evnt.item, false);
@@ -39,6 +38,38 @@ new Sortable(document.querySelector("#sortable"), {
     group: {
         name: "shared",
     }
+});
+
+// Sortable adds the fallback and ghost at different points in its drag lifecycle.
+// Watch for those nodes/classes so both get resized after they exist.
+const beadDragResizeObserver = new MutationObserver(function (mutations) {
+    const dragVisuals = new Set();
+    for (const mutation of mutations) {
+        if (mutation.type === "attributes" && mutation.target instanceof Element) {
+            if (mutation.target.matches(".sortable-fallback, #sortable .sortable-ghost")) {
+                dragVisuals.add(mutation.target);
+            }
+        }
+        for (const node of mutation.addedNodes) {
+            if (!(node instanceof Element)) continue;
+            if (node.matches(".sortable-fallback, #sortable .sortable-ghost")) {
+                dragVisuals.add(node);
+            }
+            node.querySelectorAll(".sortable-fallback, #sortable .sortable-ghost").forEach(function (visual) {
+                dragVisuals.add(visual);
+            });
+        }
+    }
+
+    for (const bead of dragVisuals) {
+        resizeDragVisual(bead, bead.classList.contains("sortable-fallback"));
+    }
+});
+beadDragResizeObserver.observe(document.body, {
+    attributes: true,
+    attributeFilter: ["class"],
+    childList: true,
+    subtree: true,
 });
 
 // Function used to add x button on bead when added to bracelet
@@ -182,6 +213,9 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
         newBead.style.opacity = "1";
         newBead.style.setProperty("width", `${newBeadPercentageSizing[0] * 100}%`, "important");
         newBead.style.setProperty("height", `${newBeadPercentageSizing[1] * 100}%`, "important");
+        const beadImage = newBead.querySelector("img");
+        beadImage.style.setProperty("width", "100%", "important");
+        beadImage.style.setProperty("height", "100%", "important");
         document.querySelector("#sortable").appendChild(newBead);
         // newBead.offsetWidth;
         addXButton(newBead);
@@ -263,32 +297,44 @@ function createErrMsg(msg) {
 
 
 function resizeBeadForBracelet(newBead, returnPercentage) {
-    // //console.log(newBead.clientHeight / 52);
-    //console.log(newBead.children);
-    let newBeadHeightPercentage = (newBead.querySelector("img").height / 52);
-    let newBeadWidthPercentage = (newBead.querySelector("img").width / 613);
-    //console.log(newBeadWidthPercentage, newBeadHeightPercentage);
+    const beadImage = newBead.querySelector("img");
+    const sourceHeight = Number(beadImage.getAttribute("height")) || beadImage.naturalHeight || beadImage.height;
+    const sourceWidth = Number(beadImage.getAttribute("width")) || beadImage.naturalWidth || beadImage.width;
+    const newBeadHeightPercentage = sourceHeight / 52;
+    const newBeadWidthPercentage = sourceWidth / 613;
 
-
-    let newBeadTransitionHeight = document.querySelector("#sortable").getBoundingClientRect().height * newBeadHeightPercentage;
-    let newBeadTransitionWidth = document.querySelector("#sortable").getBoundingClientRect().width * newBeadWidthPercentage;
-    // //console.log(newBeadTransitionHeight, newBeadTransitionWidth);
-    // //console.log(newBeadHeightPercentage);
-
-    // //console.log(newBead.children);
+    const sortableRect = document.querySelector("#sortable").getBoundingClientRect();
+    const newBeadTransitionHeight = sortableRect.height * newBeadHeightPercentage;
+    const newBeadTransitionWidth = sortableRect.width * newBeadWidthPercentage;
     if (returnPercentage) {
-        //console.log("pixel");
-        newBead.style.setProperty("height", `${newBeadTransitionHeight}px`, "important")
-        newBead.style.setProperty("width", `${newBeadTransitionWidth}px`, "important")
+        newBead.style.setProperty("height", `${newBeadTransitionHeight}px`, "important");
+        newBead.style.setProperty("width", `${newBeadTransitionWidth}px`, "important");
+        beadImage.style.setProperty("height", `${newBeadTransitionHeight}px`, "important");
+        beadImage.style.setProperty("width", `${newBeadTransitionWidth}px`, "important");
         return [newBeadWidthPercentage, newBeadHeightPercentage];
     } else {
-        //console.log("percent");
         newBead.style.setProperty("height", `${newBeadHeightPercentage * 100}%`, "important");
         newBead.style.setProperty("width", `${newBeadWidthPercentage * 100}%`, "important");
-        //console.log(newBead.style);
+        beadImage.style.setProperty("height", "100%", "important");
+        beadImage.style.setProperty("width", "100%", "important");
     }
+}
 
-    // //console.log(newBead.style);
+function resizeDragVisual(bead, usePixelDimensions) {
+    if (!bead) return;
+    const sizingMode = usePixelDimensions ? "pixels" : "percent";
+    if (bead.dataset.braceletSizingMode === sizingMode) return;
+
+    resizeBeadForBracelet(bead, usePixelDimensions);
+    bead.dataset.braceletSizingMode = sizingMode;
+
+    if (usePixelDimensions) {
+        const fallbackRect = bead.getBoundingClientRect();
+        beadChoiceSortable.option("fallbackOffset", {
+            x: fallbackRect.width / 2,
+            y: fallbackRect.height / 2,
+        });
+    }
 }
 
 
