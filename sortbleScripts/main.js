@@ -6,6 +6,7 @@ new Sortable(document.querySelector("#choicetable"), {
     forceFallback: true,
     direction: "horizontal",
     sort: false,
+    scroll: false,
     group: {
         pull: "clone",
         name: "shared",
@@ -17,6 +18,8 @@ new Sortable(document.querySelector("#sortable"), {
     animation: 200,
     forceFallback: true, fallbackOnBody: true,
     direction: "horizontal",
+    scroll: false,
+   
     // Function called when element is added by dragging
     onAdd: function (evnt) {
         resizeBeadForBracelet(evnt.item, false);
@@ -119,10 +122,10 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
     // Ensure it goes above sortable div
     newBead.style.zIndex = "9999";
 
-    
+
 
     // Get tapped bead position data
-    const originalBeadRectData = bead.getClientRects()[0]; 
+    const originalBeadRectData = bead.getClientRects()[0];
     let originalBeadLeft = originalBeadRectData.left + window.scrollX;  // We need to add the scroll value to get
     let originalBeadTop = originalBeadRectData.top + window.scrollY;    // the absolute top/left values
     // Now get position for spot on bracelet
@@ -132,7 +135,7 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
     // Constants that need to be added to ensure proper spacing
     const BEAD_PADDING = 6;
     // //console.log(sortableDiv);
-    const BRACELET_CONTAINER_PADDING = document.querySelector("#collector").getBoundingClientRect().width * 0.0258064516 ;
+    const BRACELET_CONTAINER_PADDING = document.querySelector("#collector").getBoundingClientRect().width * 0.0258064516;
     // TO get the new beads left value, we first need to know if the sortable div has neads in it
     let nextBeadPosLeft = 0;
     if (sortableDiv.children.length > 0) {
@@ -140,14 +143,14 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
         nextBeadPosLeft = sortableDiv.lastElementChild.getClientRects()[0].right + BEAD_PADDING + window.scrollX;
     } else {
         // If no beads present, get the sortable div left value and add constants
-        nextBeadPosLeft = sortableDiv.getClientRects()[0].left + BRACELET_CONTAINER_PADDING  + window.scrollX;// 
+        nextBeadPosLeft = sortableDiv.getClientRects()[0].left + BRACELET_CONTAINER_PADDING + window.scrollX;// 
 
     }
     //console.log(nextBeadPosLeft);
-    
+
     // Transform values, used for animation
-    let deltaTop =  braceletTop - originalBeadTop;
-    let deltaLeft =  nextBeadPosLeft - originalBeadLeft;
+    let deltaTop = braceletTop - originalBeadTop;
+    let deltaLeft = nextBeadPosLeft - originalBeadLeft;
     // console.log(`Top: ${deltaTop} Left: ${deltaLeft}`);
     // console.log(originalBeadLeft + deltaLeft);
     // Put bead at the tapped bead
@@ -182,15 +185,15 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
         document.querySelector("#sortable").appendChild(newBead);
         // newBead.offsetWidth;
         addXButton(newBead);
-      
-        
+
+
         if (checkForSpaceOnBracelet(newBead)) {
             createErrMsg("Not enough space for that bead.");
             newBead.remove();
         } else {
             updateTotal();
         }
-    }, {once: true});
+    }, { once: true });
 });
 function checkForSpaceOnBracelet(evnt) {
     const bracelet = document.querySelector("#sortable");
@@ -199,7 +202,7 @@ function checkForSpaceOnBracelet(evnt) {
     // console.log(`Breaclet width: ${braceletWidth}`);
     const BEAD_MARGIN = 6;
     const beads = document.querySelectorAll("#sortable .bead-state-highlight");
-    
+
     let currentOccupiedSpace = 0;
     for (let bead of beads) {
         // //console.log(bead.getClientRects());
@@ -228,7 +231,7 @@ function createErrMsg(msg) {
     if (document.querySelector(".errorDiv")) {
         return;
     }
-    
+
     // Create a div holding an error message
     let errorDiv = document.createElement("div");
     errorDiv.classList.add("errorDiv");
@@ -239,10 +242,10 @@ function createErrMsg(msg) {
         if (evnt.type == "transitionend") {
             evnt.target.remove();
         }
-    });   
+    });
     document.body.append(errorDiv);
     errorDiv.offsetWidth;
-    
+
     // Start animation to make opacity go to 0
     requestAnimationFrame(() => {
         errorDiv.style.opacity = "0";
@@ -265,7 +268,7 @@ function resizeBeadForBracelet(newBead, returnPercentage) {
     let newBeadHeightPercentage = (newBead.querySelector("img").height / 52);
     let newBeadWidthPercentage = (newBead.querySelector("img").width / 613);
     //console.log(newBeadWidthPercentage, newBeadHeightPercentage);
-    
+
 
     let newBeadTransitionHeight = document.querySelector("#sortable").getBoundingClientRect().height * newBeadHeightPercentage;
     let newBeadTransitionWidth = document.querySelector("#sortable").getBoundingClientRect().width * newBeadWidthPercentage;
@@ -290,6 +293,7 @@ function resizeBeadForBracelet(newBead, returnPercentage) {
 
 
 
-// 6 horus so far
+//  horus so far
 // 4 - 10/9
 // 2 - 10/20
+// 4 - 10/21
