@@ -211,54 +211,56 @@
               <!-- remeber about this css!!!!!!!!!!!!!! -->
               <style>
 
+
+                ul#clastable , .tclasp, .tclaspleft, .hookclaspleft, .hookclasp, .coilclasp, .noclasp, .noclaspleft, .coilclaspleft {
+                  top: 50% !important;
+                  transform: translateY(-50%);
+                }
+
+
+
                 ul#clasptable {
                   left: 87% !important;
                 }
                 .tclasp,
                 .tclaspleft, .hookclaspleft, .hookclasp, .coilclasp, .noclasp, .noclaspleft {
-                  aspect-ratio: 1.818;
+                  /* aspect-ratio: 1.818; */
                   width: 13% !important;
                   height: 51% !important;
-                  background-size: cover !important;
-                  top: 20% !important;
+                  /* background-size: cover !important; */
+                  /* top: 24% !important; */
+                  background-size: contain !important;
                   
                 }
                 .coilclaspleft {
-                  aspect-ratio: 1.88;
+                  /* aspect-ratio: 1.88; */
                   width: 13% !important;
                   height: 51% !important;
                   background-size: contain !important;
-                  top: 50% !important;
+                  /* top: 50% !important; */
                   transform: translateY(-50%);
                 }
                 
                 #sortable {
+                  padding-left: 2.58064516% !important;
                   /* salcuate percenatge for sizing then we go resize the beads */
                   /* width: ; */
                   top: 50% !important;
-                  transform: translateY(-50%);
-                  left: 13% !important;
+                  left: 50% !important;
+                  transform: translate(-50%, -50%);
+                  
+                  /* left: 13% !important; */
                   aspect-ratio: 11.7 !important;
                   width: 78% !important;
                   max-height: 49% !important;
 
                   overflow: visible;
-                  /* background-image: url(https://lewallenjewelry.com/images/byob_template.jpg);
-                  background-size: cover;
-                  background-repeat: no-repeat; */
-                }
-
-                #sortable .bead-state-highlight, #sortable .bead-state-highlight img{
-                  /* height: 115% !important;
-                  width: auto !important;
-                  overflow: visible; */
-                  /* background-size: contain; */
                 }
 
                 #ropetable {
                   /* aspect-ratio: 15; */
-                  height: 56% !important;
-                  width: 87% !important;
+                  height: 52% !important;
+                  width: 82% !important;
                   background-size: contain;
                   /* top: 0px !important; */
                   /* left: 0px !important; */
@@ -270,7 +272,7 @@
               </style>
               <div id="collector"
                 style="position:sticky;top:0px;background-color:white;z-index:999;width:90vw;height:auto;aspect-ratio:7.3;
-                background-size:contain; background-position: center;">
+                background-size:contain; background-position: center;overflow: hidden;">
                 <ul id="clasptableleft" class="noclaspleft"></ul>
                 <ul id="ropetable" class="norope"></ul>
                 <ul id="sortable" class="receiver"></ul>
@@ -379,20 +381,16 @@
                     <h3 class="beadheader"><span class="byob-fullscreen">2</span><span class="byob-mobile">3</span>.
                       Select and Drag beads onto Rope</h3>
 
-
-
-
-
-
-
-
                     <style>
+
                       /* Used for x button on each bead */
                       .removeBeadButton {
                         text-align: center;
                         margin: 0px;
                         position: absolute;
-                        right: 0%;
+                        right: 50%;
+                        transform: translateX(50%);
+                        top: -30%;
                         color: red;
                         cursor: pointer;
 
@@ -401,6 +399,10 @@
                         width: 20px;
                         padding: 0px;
 
+                      }
+
+                      li.bead-state-highlight img {
+                        height: 100% !important;
                       }
 
                       .errorDiv {
@@ -437,6 +439,11 @@
                         display: none !important;
                         list-style-type: none;
                       }
+
+                      /* .class-bead-state-highlight img{
+                        height: 100%;
+                        width: 100%;
+                      } */
                     </style>
 
 
