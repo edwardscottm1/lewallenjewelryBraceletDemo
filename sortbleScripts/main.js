@@ -180,7 +180,7 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
 });
 function checkForSpaceOnBracelet(evnt) {
     const bracelet = document.querySelector("#sortable");
-    const braceletWidth = bracelet.getBoundingClientRect().width - (bracelet.getBoundingClientRect().width * .01);
+    const braceletWidth = bracelet.getBoundingClientRect().width - (bracelet.getBoundingClientRect().width * .031);
     const BEAD_MARGIN = 6;
     const beads = document.querySelectorAll("#sortable .bead-state-highlight");
 
@@ -266,3 +266,4 @@ function resizeBeadForBracelet(newBead, returnPercentage, cloned) {
 // 4 - 10/9
 // 2 - 10/20
 // 4 - 10/21
+// 1.5 10/22
