@@ -11,22 +11,10 @@ new Sortable(document.querySelector("#choicetable"), {
         pull: "clone",
         name: "shared",
         put: false,
-    },onMove: function (evnt) {
-        console.log(document.querySelector(".sortable-ghost"));
-        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")).getPropertyValue("width"));
-        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")).getPropertyValue("height"));
-        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")).getPropertyValue("listStyleType"));
     },
      onClone: function (evnt) {
-        console.log(evnt);
-        // Modify the variable globally on the root element
+        // Modify ghost/preview bead to resize with the screen
         resizeBeadForBracelet(evnt.clone, false, true);
-        // document.documentElement.style.setProperty('--ghost-width', 'blue');
-        // document.documentElement.style.setProperty('--ghost-height', 'blue');
-        // console.log(document.styleSheets);
-        console.log(window.getComputedStyle(document.documentElement));
-
-
     }
 });
 /* Set #sortable div to be sortable*/
@@ -35,28 +23,22 @@ new Sortable(document.querySelector("#sortable"), {
     forceFallback: true, fallbackOnBody: true,
     direction: "horizontal",
     scroll: false,
-    onMove: function (evnt) {
-        console.log(document.querySelector(".sortable-ghost"));
-        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")).getPropertyValue("width"));
-        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")).getPropertyValue("height"));
-        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")));
-    },
-    
     // Function called when element is added by dragging
     onAdd: function (evnt) {
+        // Shrink bead
         resizeBeadForBracelet(evnt.item, false);
-        // //console.log(checkForSpaceOnBracelet(evnt));
+        // If there is no space remove
         if (checkForSpaceOnBracelet(evnt)) {
             createErrMsg("Not enough space for that bead.");
             evnt.item.remove();
             updateTotal();
             return;
         }
+        // If there is space modify it 
         addXButton(evnt);
         updateTotal();
         let spanTag = evnt.item.querySelector("span")
         spanTag.remove()
-        // evnt.target.removeChild(evnt.item);
     },
     group: {
         name: "shared",
@@ -65,7 +47,6 @@ new Sortable(document.querySelector("#sortable"), {
 
 // Function used to add x button on bead when added to bracelet
 function addXButton(evnt) {
-    // console.trace("Added x");
     let bead = '';
     // IF the user dragged in the item
     if (typeof evnt.item !== "undefined") {
@@ -96,14 +77,8 @@ function updateTotal() {
     let total = 160.00;
     let counter = 0;
     for (let bead of beads) {
-        // let beadParts = bead.value.split("+!");
         let beadParts = bead.children[1].value.split("+!");
-        // //console.log(beadParts);
         let slength = beads.length;
-        // //console.log(slength);
-        // let str = ;
-        // str = str.slice(str.indexOf("!") + 1);
-        // total += Number.parseFloat(str);
         if (parseFloat(beadParts[1]) <= 25 && counter < 3) {
             counter++;
             cart += `${beadParts[0]}\n`;
@@ -114,12 +89,9 @@ function updateTotal() {
             total += parseFloat(beadParts[1]);
             cart += beadParts.join("+!");
         }
-        // //console.log(counter);
-
     }
     // Update appropriate elements
     document.querySelector("input#byob_prop4").value = cart;
-    // //console.log(document.querySelector("input#byob_prop4").value);
     document.querySelector("#showpricebottom").textContent = total.toFixed(2);
     document.querySelector("#showpricetop").textContent = total.toFixed(2);
 
@@ -134,18 +106,12 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
     // Clone bead at give styles needed to start transition
     const newBead = bead.cloneNode(true);
     newBead.removeChild(newBead.querySelector("span"));
-    // //console.log(newBead);
     newBead.style.position = "absolute";
     newBead.style.listStyleType = "none";
     newBead.style.transition = "transform .5s ease-out";
-    // newBead.style.transition = "width 1s ease-out";
-    // newBead.style.transition = "height 1s ease-out";
     newBead.style.opacity = ".5";
     // Ensure it goes above sortable div
     newBead.style.zIndex = "9999";
-
-
-
     // Get tapped bead position data
     const originalBeadRectData = bead.getClientRects()[0];
     let originalBeadLeft = originalBeadRectData.left + window.scrollX;  // We need to add the scroll value to get
@@ -156,7 +122,7 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
     let braceletTop = braceletContainerRectData.top + window.scrollY;
     // Constants that need to be added to ensure proper spacing
     const BEAD_PADDING = 6;
-    // //console.log(sortableDiv);
+    
     const BRACELET_CONTAINER_PADDING = document.querySelector("#collector").getBoundingClientRect().width * 0.0258064516;
     // TO get the new beads left value, we first need to know if the sortable div has neads in it
     let nextBeadPosLeft = 0;
@@ -166,15 +132,11 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
     } else {
         // If no beads present, get the sortable div left value and add constants
         nextBeadPosLeft = sortableDiv.getClientRects()[0].left + BRACELET_CONTAINER_PADDING + window.scrollX;// 
-
     }
-    //console.log(nextBeadPosLeft);
 
     // Transform values, used for animation
     let deltaTop = braceletTop - originalBeadTop;
     let deltaLeft = nextBeadPosLeft - originalBeadLeft;
-    // console.log(`Top: ${deltaTop} Left: ${deltaLeft}`);
-    // console.log(originalBeadLeft + deltaLeft);
     // Put bead at the tapped bead
     newBead.style.top = `${originalBeadTop}px`;
     newBead.style.left = `${originalBeadLeft}px`;
@@ -205,7 +167,6 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
         newBead.style.setProperty("width", `${newBeadPercentageSizing[0] * 100}%`, "important");
         newBead.style.setProperty("height", `${newBeadPercentageSizing[1] * 100}%`, "important");
         document.querySelector("#sortable").appendChild(newBead);
-        // newBead.offsetWidth;
         addXButton(newBead);
 
 
@@ -219,34 +180,29 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
 });
 function checkForSpaceOnBracelet(evnt) {
     const bracelet = document.querySelector("#sortable");
-    // //console.log(bracelet.getBoundingClientRect());
-    const braceletWidth = bracelet.getBoundingClientRect().width - (bracelet.getBoundingClientRect().width * .02471768202);
-    // console.log(`Breaclet width: ${braceletWidth}`);
+    const braceletWidth = bracelet.getBoundingClientRect().width - (bracelet.getBoundingClientRect().width * .01);
     const BEAD_MARGIN = 6;
     const beads = document.querySelectorAll("#sortable .bead-state-highlight");
 
     let currentOccupiedSpace = 0;
     for (let bead of beads) {
-        // //console.log(bead.getClientRects());
         currentOccupiedSpace += bead.getClientRects()[0].width + BEAD_MARGIN;
     }
-    // console.log(`Occupied space ${currentOccupiedSpace}`);
     let addedBead = '';
     // IF the user dragged in the item
     // WHen you drag an item in, the ghost is part of the div so we don't need to add the new beads width
     if (typeof evnt.item !== "undefined") {
         addedBead = evnt.item;
-
         return currentOccupiedSpace > braceletWidth ? true : false;
 
     } else {
         // If user clicked the item, we have to add the beads with as its not part of the div yet
         addedBead = evnt;
         const addedBeadWidth = addedBead.getClientRects()[0].width;
-        // console.log(addedBead.getBoundingClientRect());
-        return currentOccupiedSpace + addedBeadWidth > braceletWidth ? true : false;
+        // console.log(`New Bead width: ${addedBead.getBoundingClientRect().width}`);
+        // console.log(`Calculated new space: ${currentOccupiedSpace + addedBeadWidth}`);
+        return currentOccupiedSpace > braceletWidth ? true : false;
     }
-    // //console.log(currentOccupiedSpace, addedBeadWidth, braceletWidth);
 }
 function createErrMsg(msg) {
     // First check if an error msg is already shown
@@ -276,48 +232,32 @@ function createErrMsg(msg) {
 
 
 
-// const beads = document.querySelectorAll(".bead-state-highlight");
 
-// for (let bead of beads) {
-//     bead.style.aspectRatio = bead.clientWidth / bead.clientHeight;
-//     //console.log(bead);
-// }
-
-
+// FUnction used to resize bead when added to the bracelet
 function resizeBeadForBracelet(newBead, returnPercentage, cloned) {
-    // //console.log(newBead.clientHeight / 52);
-    //console.log(newBead.children);
+    // Calculate percentage sizing
     let newBeadHeightPercentage = (newBead.querySelector("img").height / 52);
     let newBeadWidthPercentage = (newBead.querySelector("img").width / 613);
-    //console.log(newBeadWidthPercentage, newBeadHeightPercentage);
-
-
+    
+    // Calculate pixal values, used for many of the animations
     let newBeadTransitionHeight = document.querySelector("#sortable").getBoundingClientRect().height * newBeadHeightPercentage;
     let newBeadTransitionWidth = document.querySelector("#sortable").getBoundingClientRect().width * newBeadWidthPercentage;
-    // //console.log(newBeadTransitionHeight, newBeadTransitionWidth);
-    // //console.log(newBeadHeightPercentage);
-
-    // //console.log(newBead.children);
+    
+    // USed for taps, we set the ghost bead a pixel value and return a percent value to 
+    // set sizing to percentage when appended to #sortable
     if (returnPercentage) {
-        console.log("return percent");
-        //console.log("pixel");
         newBead.style.setProperty("height", `${newBeadTransitionHeight}px`, "important")
         newBead.style.setProperty("width", `${newBeadTransitionWidth}px`, "important")
         return [newBeadWidthPercentage, newBeadHeightPercentage];
+    // Used to change size of ghost/preview bead shown when dragging in the element
     } else if (cloned) {
-        console.log("cloned");
         document.documentElement.style.setProperty('--ghost-width', `${newBeadTransitionWidth}px`, "important");
         document.documentElement.style.setProperty('--ghost-height', `${newBeadTransitionHeight}px`, "important");
-        console.log(document.documentElement.style);
+    // Used when bead is dragged into the bracelet, give them percentage to resize
     } else {
-        console.log("set percent");
-        //console.log("percent");
         newBead.style.setProperty("height", `${newBeadHeightPercentage * 100}%`, "important");
         newBead.style.setProperty("width", `${newBeadWidthPercentage * 100}%`, "important");
-        //console.log(newBead.style);
     }
-
-    // //console.log(newBead.style);
 }
 
 
