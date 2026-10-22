@@ -11,6 +11,22 @@ new Sortable(document.querySelector("#choicetable"), {
         pull: "clone",
         name: "shared",
         put: false,
+    },onMove: function (evnt) {
+        console.log(document.querySelector(".sortable-ghost"));
+        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")).getPropertyValue("width"));
+        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")).getPropertyValue("height"));
+        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")).getPropertyValue("listStyleType"));
+    },
+     onClone: function (evnt) {
+        console.log(evnt);
+        // Modify the variable globally on the root element
+        resizeBeadForBracelet(evnt.clone, false, true);
+        // document.documentElement.style.setProperty('--ghost-width', 'blue');
+        // document.documentElement.style.setProperty('--ghost-height', 'blue');
+        // console.log(document.styleSheets);
+        console.log(window.getComputedStyle(document.documentElement));
+
+
     }
 });
 /* Set #sortable div to be sortable*/
@@ -19,7 +35,13 @@ new Sortable(document.querySelector("#sortable"), {
     forceFallback: true, fallbackOnBody: true,
     direction: "horizontal",
     scroll: false,
-   
+    onMove: function (evnt) {
+        console.log(document.querySelector(".sortable-ghost"));
+        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")).getPropertyValue("width"));
+        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")).getPropertyValue("height"));
+        console.log(window.getComputedStyle(document.querySelector(".sortable-ghost")));
+    },
+    
     // Function called when element is added by dragging
     onAdd: function (evnt) {
         resizeBeadForBracelet(evnt.item, false);
@@ -198,7 +220,7 @@ document.querySelector("#choicetable").addEventListener("click", function (evnt)
 function checkForSpaceOnBracelet(evnt) {
     const bracelet = document.querySelector("#sortable");
     // //console.log(bracelet.getBoundingClientRect());
-    const braceletWidth = bracelet.getBoundingClientRect().width - (bracelet.getBoundingClientRect().width * .02971768202);
+    const braceletWidth = bracelet.getBoundingClientRect().width - (bracelet.getBoundingClientRect().width * .02471768202);
     // console.log(`Breaclet width: ${braceletWidth}`);
     const BEAD_MARGIN = 6;
     const beads = document.querySelectorAll("#sortable .bead-state-highlight");
@@ -262,7 +284,7 @@ function createErrMsg(msg) {
 // }
 
 
-function resizeBeadForBracelet(newBead, returnPercentage) {
+function resizeBeadForBracelet(newBead, returnPercentage, cloned) {
     // //console.log(newBead.clientHeight / 52);
     //console.log(newBead.children);
     let newBeadHeightPercentage = (newBead.querySelector("img").height / 52);
@@ -277,11 +299,18 @@ function resizeBeadForBracelet(newBead, returnPercentage) {
 
     // //console.log(newBead.children);
     if (returnPercentage) {
+        console.log("return percent");
         //console.log("pixel");
         newBead.style.setProperty("height", `${newBeadTransitionHeight}px`, "important")
         newBead.style.setProperty("width", `${newBeadTransitionWidth}px`, "important")
         return [newBeadWidthPercentage, newBeadHeightPercentage];
+    } else if (cloned) {
+        console.log("cloned");
+        document.documentElement.style.setProperty('--ghost-width', `${newBeadTransitionWidth}px`, "important");
+        document.documentElement.style.setProperty('--ghost-height', `${newBeadTransitionHeight}px`, "important");
+        console.log(document.documentElement.style);
     } else {
+        console.log("set percent");
         //console.log("percent");
         newBead.style.setProperty("height", `${newBeadHeightPercentage * 100}%`, "important");
         newBead.style.setProperty("width", `${newBeadWidthPercentage * 100}%`, "important");

@@ -211,6 +211,7 @@
               <!-- remeber about this css!!!!!!!!!!!!!! -->
               <style>
 
+              
 
                 ul#clastable , .tclasp, .tclaspleft, .hookclaspleft, .hookclasp, .coilclasp, .noclasp, .noclaspleft, .coilclaspleft {
                   top: 50% !important;
@@ -427,6 +428,13 @@
                       /* Apply styles to the ghost bead */
                       #sortable .sortable-ghost {
                         border: 2px solid green !important;
+                        width: var(--ghost-width) !important;
+                        height: var(--ghost-height) !important;
+                        list-style-type: none !important;
+                      }
+                      .sortable-fallback {
+                        list-style-type: none !important;
+
                       }
 
                       #sortable .sortable-ghost img {
@@ -435,9 +443,9 @@
 
                       #sortable .sortable-ghost span,
                       #sortable .sortable-ghost button,
-                      .sortable-fallback button, #sortable-ghost {
+                      .sortable-fallback button {
                         display: none !important;
-                        list-style-type: none;
+                        list-style-type: none !important;
                       }
 
                       /* .class-bead-state-highlight img{
